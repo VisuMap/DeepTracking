@@ -20,7 +20,7 @@ augLen = np.max(augX) + 1
 md.AddLayers(netCfg[0])
 md.AddDropout()
 md.AddLayers(netCfg[1:-1])
-varAugX, Rep = md.AddAugmentIndexed(augLen, augDim, 'augX', 'AugRep')
+varAugX, _ = md.AddAugmentIndexed(augLen, augDim, binding=1)
 md.AddLayers(netCfg[-1:])
 md.AddScalingTo(ds.Y)
 md.cost = md.SquaredCost(md.Output(), md.Label()) 
