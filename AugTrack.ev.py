@@ -11,16 +11,16 @@ mdName = sys.argv[1]
 md = ModelBuilder()
 md.LoadModel(mdName)
 
-X = md.log.LoadTable()[:,1:]
-K = 4
-N = X.shape[0]//K
-varAugX, augX = md.GetVariable('augX'), np.zeros([K*N], dtype=np.int32)
-for k in range(K):
-    augX[k*N:k*N+N] = k
+X = md.log.LoadTable()
+augX = X[:,0].astype(np.int32)
+X = X[:, 1:]
+varAugX = md.GetVariable('augX')
 varRep = md.GetVar('AugRep:0')
 cR = md.GetTensor(varRep)
 R = np.copy(cR)
-md.log.ShowMatrix(R, view=4)
+K = R.shape[0]
+N = X.shape[0]//K
+#md.log.ShowMatrix(R, view=4)
 
 map = md.sess.run(md.Output(), {md.inputHod:X, varAugX:augX})
 md.log.AppMapping2(map)

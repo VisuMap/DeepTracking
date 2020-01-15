@@ -7,17 +7,15 @@ import tensorflow as tf
 
 co = mu.CmdOptions()
 ds = mu.ModelDataset('+', 'Shp')
+augX = ds.X[:,0].astype(np.int32)
 ds.X = ds.X[:,1:]
 ds.UpdateAux()
 
 md = mu.ModelBuilder(ds.xDim, ds.yDim, job=co.job)
 netCfg = 5 * [30]
-md.r0 = 0.00002
-augLen, augDim = 4, 3
-augX = np.zeros(ds.N, dtype=np.int32)
-L = ds.N//augLen 
-for k in range(augLen):       
-    augX[k*L:(k*L+L)] = k
+md.r0 = 0.0005
+augDim = 3
+augLen = np.max(augX) + 1
 
 md.AddLayers(netCfg[0])
 md.AddDropout()
