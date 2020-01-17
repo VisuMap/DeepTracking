@@ -12,7 +12,7 @@ ds.X = ds.X[:,1:]
 ds.UpdateAux()
 
 md = mu.ModelBuilder(ds.xDim, ds.yDim, job=co.job)
-netCfg = 5 * [30]
+netCfg =  5 * [30]
 md.r0 = 0.0005
 augDim = 3
 augLen = np.max(augX) + 1
@@ -20,7 +20,7 @@ augLen = np.max(augX) + 1
 md.AddLayers(netCfg[0])
 md.AddDropout()
 md.AddLayers(netCfg[1:-1])
-varAugX, _ = md.AddAugmentIndexed(augLen, augDim, binding=1)
+varAugX, _ = md.AddAugmentIndexed(augLen, augDim, binding=3)
 md.AddLayers(netCfg[-1:])
 md.AddScalingTo(ds.Y)
 md.cost = md.SquaredCost(md.Output(), md.Label()) 
