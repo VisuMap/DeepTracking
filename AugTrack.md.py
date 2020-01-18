@@ -12,9 +12,9 @@ ds.X = ds.X[:,1:]
 ds.UpdateAux()
 
 md = mu.ModelBuilder(ds.xDim, ds.yDim, job=co.job)
-netCfg =  5 * [30]
+netCfg =  5 * [50]
 md.r0 = 0.0005
-augDim = 3
+augDim = 5
 augLen = np.max(augX) + 1
 
 md.AddLayers(netCfg[0])
