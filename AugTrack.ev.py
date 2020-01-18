@@ -21,22 +21,28 @@ R = np.copy(cR)
 K = R.shape[0]
 N = X.shape[0]//K
 map = None
-mapSize = 1227.0
 
+mapFactor, mapMargin = 1.0, 0.15
+for line in tuple(open(mdName+'.md')):
+    fs = line.split(' ')
+    if fs[0] == 'MapFactor:':
+        mapFactor = 1.0/float(fs[1])
+def ScaleMap(m):
+    return mapFactor * (m - mapMargin)
 
 def ShowInitMap():
     global map
     R[:,:] = cR[:,:]
     varRep.load(R, md.sess)
     map = md.sess.run(md.Output(), {md.inputHod:X, varAugX:augX})
-    md.log.ShowMatrix(mapSize*map, view=13, access='r')
+    md.log.ShowMatrix(ScaleMap(map), view=13, access='r')
 
 def ShowMap(k):
     global map
     varRep.load(R, md.sess)
     rr = slice(k*N, k*N+N)
     map[rr, :] = md.sess.run(md.Output(), {md.inputHod:X[rr, :], varAugX:augX[rr]})
-    md.log.ShowMatrix(mapSize*map, view=13, access='r')
+    md.log.ShowMatrix(ScaleMap(map), view=13, access='r')
     #time.sleep(0.01)
 
 def Loop(repeats, steps):
